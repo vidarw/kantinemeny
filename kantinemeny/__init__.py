@@ -24,7 +24,7 @@ class Cafeterias(dict):
             self.json = self._get()
 
         self.data = self._map_cafeterias()
-        self.list = [(x, self.data[x]) for x in self.data.keys()]
+        self.list = [(x, self.data[x]) for x in sorted(self.data.keys())]
 
         super().__init__(self.data)
 
