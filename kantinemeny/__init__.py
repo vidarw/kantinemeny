@@ -1,15 +1,54 @@
 #!/usr/bin/env python3
 
 import time
+import os.path
+import json
+from collections import OrderedDict
+from operator import itemgetter
 
 import requests
 from openpyxl import load_workbook
 
-location_map = {
-    "nostegaten58": "Nostegaten58.xlsx",
-    "nordrenostekai1": "NordreNostekai1.xlsx"
-}
 
+class Cafeterias(dict):
+    url = "http://www.tibeapp.no/hosted/albatross/getKantiner.php"
+    default_location = os.path.abspath(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                     '../data',
+                     'kantiner.json'))
+
+    def __init__(self, location="default"):
+        if location == "default":
+            self.json = json.load(open(self.default_location))
+        else:
+            self.json = self._get()
+
+        self.data = self._map_cafeterias()
+        self.list = [(x, self.data[x]) for x in self.data.keys()]
+
+        super().__init__(self.data)
+
+    def _get(self):
+        r = requests.get(self.url, stream=True)
+        r.raise_for_status()
+
+        return r.json()
+
+    def _map_cafeterias(self):
+        cafeterias = {}
+        for cafeteria in self.json:
+            if not cafeteria.get("url", None):
+                continue
+
+            filename = os.path.basename(cafeteria["url"])
+            shortname = os.path.splitext(filename)[0].lower()
+
+            cafeterias[shortname] = {
+                "filename": filename,
+                "location": cafeteria["title"]
+            }
+
+        return cafeterias
 
 class Kantinemeny(dict):
 
@@ -17,9 +56,9 @@ class Kantinemeny(dict):
     days = ('mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag')
     timestamp = None
 
-    def __init__(self, location):
-        self.location = location.lower()
-        self.filename = location_map[self.location]
+    def __init__(self, location="Nøstegaten 58", filename="Nostegaten58.xlsx"):
+        self.location = location
+        self.filename = filename
         self.url = self.url_template.format(self.filename)
         self.workbook = load_workbook(self._get())
 
@@ -64,5 +103,8 @@ class Kantinemeny(dict):
 
 if __name__ == "__main__":
     from pprint import pprint
-    k = Kantinemeny("Nostegaten58")
-    pprint(k.timestamp)
+    # k = Kantinemeny("Nostegaten58")
+    # pprint(k.timestamp)
+    # print(Cafeterias.default_location)
+    c = Cafeterias()
+    print(c.list)

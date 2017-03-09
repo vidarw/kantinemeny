@@ -3,7 +3,7 @@
 <head>
 
 {% block title %}
-  <title>Meny for Nøstegaten 58</title>
+  <title>Meny for {{ location_name }}</title>
 {% endblock %}
 
 {% block sheets %}
@@ -50,7 +50,7 @@
 {% endblock %}
 
 Menyen ble sist sjekket for {{fetched}} sekunder siden.<br>
-<a href="/api/{{- location -}}/">API</a>
+<a href="/api/{{- shortname -}}/">API</a> - <a href="/kantiner/">Flere kantiner</a>
 
 <div style="display:none;">{{visits}} visits since {{start}}</div>
 

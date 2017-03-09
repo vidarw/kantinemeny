@@ -1,0 +1,36 @@
+{% block title %}
+  <title>Kantiner</title>
+{% endblock %}
+
+{% block sheets %}
+  <link href="/static/kantiner.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block body %}
+
+  <div class=accounts>
+    <table>
+      <thead>
+        <tr>
+          <th>Kantine</th>
+          <th>API</th>
+        </tr>
+      </thead>
+      {% for cafeteria in cafeterias_map %}
+        <tr>
+          <td>
+            <a class="kantine"
+              href="/{{ cafeteria[0] }}/">
+              {{- cafeteria[1]['location'] -}}
+            </a>
+          </td>
+          <td>
+            <a class="api" href="/api/{{ cafeteria[0] }}/">
+              {{- cafeteria[0] -}}
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}
