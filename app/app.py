@@ -61,16 +61,4 @@ def index(location, json_response=False):
 
 
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(description='Launch a local test '
-                                     'Flask server with debugging.')
-    parser.add_argument('-p', '--port', dest='port', type=int, default=5753,
-                        help='Specify the port the interface instance should '
-                        'listen on. Default: 5753')
-    parser.add_argument('-i', '--bind', dest='host', default='0.0.0.0',
-                        help='Specify the IP the instance should '
-                        'listen on. Default: 0.0.0.0')
-    args = parser.parse_args()
-
-    app.run(host=args.host, port=args.port, debug=True, threaded=True)
+    pass
