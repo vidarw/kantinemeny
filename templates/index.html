@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+
+{% block title %}
+  <title>Meny for Nøstegaten 58</title>
+{% endblock %}
+
+{% block sheets %}
+  <link href="/static/meny.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0;" />
+
+<body>
+
+{% block body %}
+  <div class=accounts>
+    <table>
+      <thead>
+        <tr>
+          <th>Dag</th>
+          <th>Hovedrett</th>
+          <th>Suppe</th>
+        </tr>
+      </thead>
+      {% for dag in menu.days %}
+        <tr>
+          <td>
+            <a class="dag">
+              {{- dag | capitalize -}}
+            </a>
+          </td>
+          <td>
+            <a class="hovedrett">
+              {% autoescape false %}
+                {{menu.hot_dishes[dag] | replace('\n', "<br/>")}}
+              {% endautoescape %}
+            </a>
+          </td>
+          <td>
+            <a class="suppe">
+              {{- menu.soups[dag] -}}
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}
+
+Menyen ble sist sjekket for {{fetched}} sekunder siden.<br>
+<a href="/api/{{- location -}}/">API</a>
+
+<div style="display:none;">{{visits}} visits since {{start}}</div>
+
+</body>
+</html>
